@@ -1,12 +1,14 @@
-@include('GlobalComponents.Header')
+@include('GlobalComponents.Navbar')
 
 <?php
     $route = Route::currentRouteName();
+    use Illuminate\Support\Facades\Auth;
+
 ?>
 
 <div class="w-100 user-select-none ">
     <div class="w-100 d-flex justify-content-center mt-5">
-        @if($route === 'user.edit')
+        @if($route === 'user/{users}/edit')
         <h2>EDITAR USUARIO</h2>
         @else
         <h2>LISTA DE USUARIOS</h2>
@@ -15,7 +17,7 @@
     <div class="w-100 d-flex flex-wrap mt-5 justify-content-center">
         @if($route !== 'user.edit')
         @foreach ( $users as $user )
-        <div class="card" style="width: 18rem;">
+        <div class="card mx-5" style="width: 18rem;">
             <img src="{{url(asset('storage').'/'.$user->image)}}" class="w-100 h-100" alt="...">
             <div class="w-100 position-absolute top-0 start-50  translate-middle">
                 <span class="badge bg-success">{{$user->id}}</span>
@@ -25,11 +27,15 @@
               <p class="card-text">{{$user->email}}</p>
               <div class="d-flex flex-col gap-2">
               <a href="{{url('/user/'.$user->id.'/edit')}}" class="btn btn-primary">Editar</a>
+              @if(auth()->id() === $user->id)
+              <button type="submit" class="btn btn-danger disabled">ELiminar</button>
+              @else
               <form action="{{url('/user/'.$user->id)}}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button type="submit" onclick="return confirm('Quieres borrar este usuario?')" class="btn btn-danger">ELiminar</button>
               </form>
+              @endif
               </div>
             </div>
         </div>

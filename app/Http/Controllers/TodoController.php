@@ -15,6 +15,8 @@ class TodoController extends Controller
     public function index()
     {
         //
+        $dataTodo ['todos'] = Todo::paginate(5);
+        return view('Todo.List', $dataTodo);
     }
 
     /**
@@ -25,6 +27,9 @@ class TodoController extends Controller
     public function create()
     {
         //
+        $dataTodo['todos'] = Todo::paginate(5);
+        return view('Todo.Create',$dataTodo);
+
     }
 
     /**
@@ -36,6 +41,10 @@ class TodoController extends Controller
     public function store(Request $request)
     {
         //
+        $dataTodo ['todos'] = $request->except(['_token']);
+        Todo::insert($dataTodo);
+        return redirect('todo/create');
+
     }
 
     /**
@@ -55,9 +64,11 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Todo $todo)
+    public function edit($id)
     {
         //
+        $todo = Todo::findOrFail($id);
+        return view('Todo.Create', compact('todo'));
     }
 
     /**
@@ -67,9 +78,13 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update($id)
     {
         //
+        $dataTodo = request()->except(['_token', '_method']);
+        Todo::where('id', '=', $id)->update($dataTodo);
+        $todo = Todo::findOrFail($id);
+        return \redirect('todo/create');
     }
 
     /**
@@ -78,8 +93,10 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Todo $todo)
+    public function destroy($id)
     {
         //
+        Todo::destroy($id);
+        return redirect('todo/create');
     }
 }

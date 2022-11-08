@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Users;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +16,8 @@ class UsersController extends Controller
     public function index()
     {
         //
-        $dataUsers['users'] = Users::paginate(5);
+        $dataUsers['users'] = User::paginate(5);
+
         return view('User.Dashboard', $dataUsers);
     }
 
@@ -44,18 +46,18 @@ class UsersController extends Controller
             $dataUser['image'] = $request->file('image')->store('uploads', 'public');
         }
         $dataUser['password'] = bcrypt($dataUser['password']);
-        Users::insert($dataUser);
+        User::insert($dataUser);
 
-        return response()->json($dataUser);
+        return redirect('login');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Users  $users
+     * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
-    public function show(Users $users)
+    public function show(User $users)
     {
         //
     }
@@ -63,13 +65,13 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Users  $users
+     * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
-        $user= Users::findOrFail($id);
+        $user= User::findOrFail($id);
         return view('User.Dashboard', compact('user'));
     }
 
@@ -77,15 +79,15 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Users  $users
+     * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         //
         $dataUser = $request->except(['_token', '_method']);
-        Users::where('id', '=', $id)->update($dataUser);
-        $user = Users::findOrFail($id);
+        User::where('id', '=', $id)->update($dataUser);
+        $user = User::findOrFail($id);
 
         return redirect('user')->with('userUpdate', $user);
     }
@@ -94,13 +96,13 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Users  $users
+     * @param  \App\Models\User  $users
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
-        Users::destroy($id);
+        User::destroy($id);
         return redirect('user')->with('message', 'User Deleted Successfully');
     }
 }

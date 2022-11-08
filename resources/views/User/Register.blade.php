@@ -32,7 +32,7 @@
                       </div>
 
                     <div class="d-flex justify-content-center row">
-                        <a href="#" class="link-info text-center mb-3 mt-2">Logueate</a>
+                        <a href="{{url('login')}}" class="link-info text-center mb-3 mt-2">Logueate</a>
                         <button type="submit" class="btn btn-primary w-75">Registrate</button>
                     </div>
                 </form>

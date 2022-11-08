@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TodoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +15,22 @@ use App\Http\Controllers\LoginController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::resource('user', UsersController::class);
-
 Route::view('/login', 'User.Login')->name('login')->middleware('guest');
 
-Route::post('/login', [LoginController::class, 'login'])->middleware('guest');
+Route::view('/', 'Home');
+
+Route::resource('user', UserController::class)->middleware('auth');
+
+//Autenticate Admin
+Route::controller('user', UserController::class)->group(function () {
+    Route::get('user/create', [UserController::class, 'create'])->middleware('guest');
+    Route::post('user', [UserController::class, 'store'])->middleware('guest');
+});
+
+Route::resource('todo', TodoController::class)->middleware('auth');
+
+Route::post('/login', [LoginController::class, 'login'])->name('login')->middleware('guest');
+
+Route::post('/logout', [LoginController::class, 'logout']);
 
 

@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center row">
-                        <a href="#" class="link-info text-center mb-3 mt-2">Registrate</a>
+                        <a href="{{url('user/create')}}" class="link-info text-center mb-3 mt-2">Registrate</a>
                         <button type="submit" class="btn btn-primary w-75">Logueate</button>
                     </div>
                 </form>
